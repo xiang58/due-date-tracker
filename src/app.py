@@ -1,17 +1,21 @@
 import streamlit as st
-import time
 
 def main():
+    if 'percent_left' not in st.session_state:
+        st.session_state.percent_left = 100
+
     big_to_go_box = '大便当盒'
-    big_to_go_box_bar = st.progress(100, big_to_go_box)
+    st.progress(st.session_state['percent_left'], big_to_go_box)
 
-    for percent_consumed in range(0, 101, 20):
-        big_to_go_box_bar.progress(100 - percent_consumed, text=big_to_go_box)
-        time.sleep(3)
+    st.button('Decrement', on_click=update_precent_left)
+    st.button("Reset", on_click=reset_precent_left)
 
-    time.sleep(3)
-    big_to_go_box_bar.empty()
-    st.button("Rerun")
+def update_precent_left():
+    if st.session_state.percent_left >= 20:
+        st.session_state.percent_left -= 20
+
+def reset_precent_left():
+    st.session_state.percent_left = 100
 
 if __name__ == '__main__':
     main()
