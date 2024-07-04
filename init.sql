@@ -1,0 +1,10 @@
+CREATE TABLE IF NOT EXISTS inventory (
+    inventory_id INTEGER PRIMARY KEY,
+    inventory_name TEXT NOT NULL,
+    current_stock INTEGER DEFAULT 0,
+    max_stock INTEGER DEFAULT 0,
+    CHECK (current_stock <= max_stock)
+);
+
+INSERT INTO inventory (inventory_name, current_stock, max_stock)
+VALUES ('大便当盒', 200, 200), ('小便当盒', 300, 300), ('叉子', 500, 500)
