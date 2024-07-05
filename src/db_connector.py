@@ -13,8 +13,10 @@ def db_connector(f):
     
     def _with_connection(*args, **kwargs):
         conn = sqlite3.connect(db_path)
+        db_cursor = conn.cursor()
+
         try:
-            rv = f(conn, *args, **kwargs)
+            rv = f(db_cursor, *args, **kwargs)
         except Exception:
             conn.rollback()
             raise
@@ -22,6 +24,7 @@ def db_connector(f):
             conn.commit()
         finally:
             conn.close()
+            
         return rv
 
     return _with_connection

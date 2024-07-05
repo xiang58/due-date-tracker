@@ -1,21 +1,29 @@
 import streamlit as st
 
+import sql_queries
+from db_connector import db_connector
+
+
+@db_connector
+def get_all_inventory(db_cursor):
+    return list(db_cursor.execute(sql_queries.GET_ALL_INVENTORY))
+
+
+def draw_progress_bars():
+    inventory = get_all_inventory()
+    for item in inventory:
+        draw_progress_bar(item)
+
+
+def draw_progress_bar(item):
+    item_name, current_stock, max_stock = item[0], item[1], item[2]
+    percent = current_stock / max_stock
+    st.progress(percent, item_name)
+
+
 def main():
-    if 'percent_left' not in st.session_state:
-        st.session_state.percent_left = 100
+    draw_progress_bars()
 
-    big_to_go_box = '大便当盒'
-    st.progress(st.session_state['percent_left'], big_to_go_box)
-
-    st.button('Decrement', on_click=update_precent_left)
-    st.button("Reset", on_click=reset_precent_left)
-
-def update_precent_left():
-    if st.session_state.percent_left >= 20:
-        st.session_state.percent_left -= 20
-
-def reset_precent_left():
-    st.session_state.percent_left = 100
 
 if __name__ == '__main__':
     main()
