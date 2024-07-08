@@ -7,4 +7,4 @@ CREATE TABLE IF NOT EXISTS inventory (
 );
 
 INSERT INTO inventory (inventory_name, current_stock, max_stock)
-VALUES ('大便当盒', 200, 200), ('小便当盒', 300, 300), ('叉子', 500, 500)
+VALUES ('大打包盒', 200, 200), ('小打包盒', 300, 300), ('叉子', 500, 500)
