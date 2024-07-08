@@ -13,6 +13,7 @@ def draw_progress_bars():
     inventory = get_all_inventory()
     for item in inventory:
         draw_progress_bar(item)
+        st.divider()
 
 
 def draw_progress_bar(item):
@@ -20,9 +21,13 @@ def draw_progress_bar(item):
     percent = current_stock / max_stock
     st.progress(percent, item_name)
     num_consumed = st.number_input(key=f'num_input_{item_id}', label='Enter how many used:', min_value=0)
-    st.button(key=f'btn_confirm_{item_id}', label='Confirm', 
-        on_click=update_inventory, args=(item_id, current_stock - num_consumed))
-    st.button(key=f'btn_reset_{item_id}', label='Reset', on_click=reset_inventory, args=(item_id,))
+
+    col1, col2, _, _, _ = st.columns(5)
+    with col1:
+        st.button(key=f'btn_confirm_{item_id}', label='Confirm', 
+            on_click=update_inventory, args=(item_id, current_stock - num_consumed))
+    with col2:
+        st.button(key=f'btn_reset_{item_id}', label='Reset', on_click=reset_inventory, args=(item_id,))
 
 
 @db_connector
