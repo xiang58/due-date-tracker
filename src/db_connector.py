@@ -8,6 +8,8 @@ def db_connector(f):
 
     if env == 'local':
         db_path = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir, 'church_inventory_local.db'))
+    elif env == 'dev':
+        db_path = 'C:\\Users\\xiang\\Desktop\\Programs\\Coding\\Database\\SQLite\\db\\church_inventory.db'
     else:
         raise Exception('Unknown env')
     
