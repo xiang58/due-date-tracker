@@ -1,4 +1,4 @@
-# church-inventory-manager
+# due-date-tracker
 * Create a virtual env
 ```
 python -m venv .venv
@@ -30,5 +30,5 @@ deactivate
 ```
 
 * Reference: 
-    - https://packaging.python.org/en/latest/guides/installing-using-pip-and-virtual-environments/
-    - https://docs.streamlit.io/
+  - https://packaging.python.org/en/latest/guides/installing-using-pip-and-virtual-environments/
+  - https://docs.streamlit.io/
