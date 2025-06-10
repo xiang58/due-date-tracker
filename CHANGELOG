@@ -1,8 +1,5 @@
-💡 - new feature &emsp;&emsp; 🔄 - modification &emsp;&emsp; 🐞 - bug fix
+💡 - new feature &emsp;&emsp; 🔄 - enhancement &emsp;&emsp; 🐞 - bug fix
 ___
-### 📌 v0.0.1
-- 💡 [**MSP-7**](https://daniel-hengyu-xiang.atlassian.net/browse/MSP-7) - POC
-- 🔄 [**MSP-8**](https://daniel-hengyu-xiang.atlassian.net/browse/MSP-8) - July misc 1
-    - Adjust layout
-    - Display more useful information
-    - Deploy to dev
+### 📌 v1.0.0
+- 💡 [**MSP-21**](https://daniel-hengyu-xiang.atlassian.net/browse/MSP-21) - POC
+- 💡 [**MSP-22**](https://daniel-hengyu-xiang.atlassian.net/browse/MSP-22) - Ready for stable release

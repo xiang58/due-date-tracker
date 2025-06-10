@@ -1,50 +1,39 @@
+from datetime import date, datetime
+
+import pytz
 import streamlit as st
 
-import sql_queries
-from db_connector import db_connector
-
-
-@db_connector
-def get_all_inventory(db_cursor):
-    return list(db_cursor.execute(sql_queries.GET_ALL_INVENTORY))
-
-
-def draw_progress_bars():
-    inventory = get_all_inventory()
-    for item in inventory:
-        draw_progress_bar(item)
-        st.divider()
-
-
-def draw_progress_bar(item):
-    item_id, item_name, current_stock, max_stock = item
-    percent = current_stock / max_stock
-    displayed_percent = round(percent * 100)
-    progress_bar_label = f'{item_name} &nbsp; - &nbsp; {current_stock} / {max_stock} &nbsp; - &nbsp; {displayed_percent} %'
-
-    st.progress(percent, progress_bar_label)
-    num_consumed = st.number_input(key=f'num_input_{item_id}', label='Enter how many used:', min_value=0)
-
-    col1, col2, _, _, _ = st.columns(5)
-    with col1:
-        st.button(key=f'btn_confirm_{item_id}', label='Confirm', 
-            on_click=update_inventory, args=(item_id, current_stock - num_consumed))
-    with col2:
-        st.button(key=f'btn_reset_{item_id}', label='Reset', on_click=reset_inventory, args=(item_id,))
-
-
-@db_connector
-def update_inventory(db_cursor, item_id, num_consumed):
-    db_cursor.execute(sql_queries.UPDATE_INVENTORY, (num_consumed, item_id))
-
-
-@db_connector
-def reset_inventory(db_cursor, item_id):
-    db_cursor.execute(sql_queries.RESET_INVENTORY, (item_id,))
+import helper
 
 
 def main():
-    draw_progress_bars()
+    recs = helper.get_all_recs()
+    for rec in recs:
+        draw_progress_bar(rec)
+        st.button('Reset', key=rec['id'], on_click=render_dt_picker, args=(rec,))
+        st.write('')
+        st.write('')
+
+
+def draw_progress_bar(rec):
+    date_delta = compute_date_delta(rec['reset_dt'])
+    progress_val = min(float(date_delta / rec['period']), 1.0)
+    st.progress(progress_val, f'{rec['desc']} ({round(progress_val * 100)}%) - last reset date: {rec['reset_dt']}')
+
+
+@st.dialog('Reset Date')
+def render_dt_picker(rec):
+    new_reset_dt = st.date_input(f'Pick a reset date for {rec['desc']}:', max_value=date.today()).isoformat()
+    if st.button('Confirm'):
+        helper.update_reset_dt(rec, new_reset_dt)
+        st.rerun()
+
+
+def compute_date_delta(reset_date_str):
+    cst = pytz.timezone('America/Chicago')
+    today = datetime.now(cst).date()
+    reset_date = date.fromisoformat(reset_date_str)
+    return (today - reset_date).days
 
 
 if __name__ == '__main__':
