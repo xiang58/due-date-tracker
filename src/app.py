@@ -1,16 +1,32 @@
+from datetime import date, datetime
+
 import pytz
 import streamlit as st
-from datetime import date, datetime
+
+import helper
 
 
 def main():
-    draw_progress_bar('bath towel', '2025-03-14', 4)
+    recs = helper.get_all_recs()
+    for rec in recs:
+        draw_progress_bar(rec)
+        st.button('Reset', key=rec['id'], on_click=render_dt_picker, args=(rec,))
+        st.write('')
+        st.write('')
 
 
-def draw_progress_bar(desc, reset_date_str, period):
-    date_delta = compute_date_delta(reset_date_str)
-    progress_val = date_delta / period
-    st.progress(progress_val, f'{desc} ({progress_val * 100}%)')
+def draw_progress_bar(rec):
+    date_delta = compute_date_delta(rec['reset_dt'])
+    progress_val = min(float(date_delta / rec['period']), 1.0)
+    st.progress(progress_val, f'{rec['desc']} ({round(progress_val * 100)}%) - last reset date: {rec['reset_dt']}')
+
+
+@st.dialog('Reset Date')
+def render_dt_picker(rec):
+    new_reset_dt = st.date_input(f'Pick a reset date for {rec['desc']}:', max_value=date.today()).isoformat()
+    if st.button('Confirm'):
+        helper.update_reset_dt(rec, new_reset_dt)
+        st.rerun()
 
 
 def compute_date_delta(reset_date_str):
