@@ -16,9 +16,18 @@ def main():
 
 
 def draw_progress_bar(rec):
-    date_delta = compute_date_delta(rec['reset_dt'])
-    progress_val = min(float(date_delta / rec['period']), 1.0)
-    st.progress(progress_val, f'{rec['desc']} ({round(progress_val * 100)}%) - last reset date: {rec['reset_dt']}')
+    reset_dt = rec['reset_dt']
+    period = rec['period']
+    desc = rec['desc']
+
+    date_delta = compute_date_delta(reset_dt)
+    progress_val = min(float(date_delta / period), 1.0)
+
+    txt = f'{desc} ({round(progress_val * 100)}%) 〰️ period {period} 〰️ reset on {reset_dt}'
+    if date_delta > period:
+        txt += f' 〰️ ⚠️ {date_delta - period} day(s) overdue'
+
+    st.progress(progress_val, txt)
 
 
 @st.dialog('Reset Date')
