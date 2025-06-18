@@ -3,11 +3,11 @@ from datetime import date, datetime, timedelta
 import pytz
 import streamlit as st
 
-import helper
+import repo
 
 
 def main():
-    recs = helper.get_all_recs()
+    recs = repo.get_all_recs()
     for rec in recs:
         draw_progress_bar(rec)
         st.button('Reset', key=rec['id'], on_click=render_dt_picker, args=(rec,))
@@ -22,20 +22,57 @@ def draw_progress_bar(rec):
 
     date_delta = compute_date_delta(reset_dt)
     progress_val = min(float(date_delta / period), 1.0)
+    rounded_progress_val = round(progress_val * 100)
     due_date = date.fromisoformat(reset_dt) + timedelta(days=int(period))
 
-    txt = f'{desc} ({round(progress_val * 100)}%) 〰️ reset on {reset_dt} 〰️ period {period} 〰️ due date {due_date}'
+    txt = f'{desc} ({rounded_progress_val}%) 〰️ reset on {reset_dt} 〰️ period {period} 〰️ due date {due_date}'
+    overdue = False
     if date_delta > period:
+        overdue = True
         txt += f' 〰️ ⚠️ {date_delta - period} day(s) overdue'
+    color = get_color(rounded_progress_val, overdue)
 
-    st.progress(progress_val, txt)
+    st.markdown(f"""
+        <div style="margin-bottom:8px;">
+            <div style="font-size: 0.95em; margin-bottom: 4px;">{txt}</div>
+            <div style="background-color: #eee; border-radius: 8px; height: 24px; width: 100%;">
+                <div style="
+                    width: {rounded_progress_val}%;
+                    background-color: {color};
+                    height: 100%;
+                    border-radius: 8px;
+                    text-align: right;
+                    transition: width 0.5s;">
+                </div>
+            </div>
+        </div>
+    """, unsafe_allow_html=True)
+
+
+def get_color(value, overdue):
+    color_scheme = {
+        'red': '#ff4b4b',
+        'dark_red': '#5E0303',
+        'yellow': '#ffd700',
+        'green': '#4caf50'
+    }
+
+    if overdue:
+        return color_scheme['dark_red']
+
+    if value < 50:
+        return color_scheme['green'] 
+    elif value < 75:
+        return color_scheme['yellow']
+    else:
+        return color_scheme['red']
 
 
 @st.dialog('Reset Date')
 def render_dt_picker(rec):
     new_reset_dt = st.date_input(f'Pick a reset date for {rec['desc']}:', max_value=date.today()).isoformat()
     if st.button('Confirm'):
-        helper.update_reset_dt(rec, new_reset_dt)
+        repo.update_reset_dt(rec, new_reset_dt)
         st.rerun()
 
 
