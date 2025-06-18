@@ -1,4 +1,4 @@
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
 
 import pytz
 import streamlit as st
@@ -22,8 +22,9 @@ def draw_progress_bar(rec):
 
     date_delta = compute_date_delta(reset_dt)
     progress_val = min(float(date_delta / period), 1.0)
+    due_date = date.fromisoformat(reset_dt) + timedelta(days=int(period))
 
-    txt = f'{desc} ({round(progress_val * 100)}%) 〰️ period {period} 〰️ reset on {reset_dt}'
+    txt = f'{desc} ({round(progress_val * 100)}%) 〰️ reset on {reset_dt} 〰️ period {period} 〰️ due date {due_date}'
     if date_delta > period:
         txt += f' 〰️ ⚠️ {date_delta - period} day(s) overdue'
 
