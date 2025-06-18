@@ -1,5 +1,11 @@
-💡 - new feature &emsp;&emsp; 🔄 - enhancement &emsp;&emsp; 🐞 - bug fix
+💡 - new feature &emsp;&emsp; ⬆️ - enhancement &emsp;&emsp; 🐞 - bug fix
 ___
-### 📌 v1.0.0
+### 📌 v1.1.0
+- 💡 [**MSP-30**](https://daniel-hengyu-xiang.atlassian.net/browse/MSP-30) - Enhacement
+  - [**MSP-28**](https://daniel-hengyu-xiang.atlassian.net/browse/MSP-28) - Add past due date reminder
+  - [**MSP-29**](https://daniel-hengyu-xiang.atlassian.net/browse/MSP-29) - Add color to progress bar
+  - [**MSP-32**](https://daniel-hengyu-xiang.atlassian.net/browse/MSP-32) - Add expected due date
+___
+### v1.0.0
 - 💡 [**MSP-21**](https://daniel-hengyu-xiang.atlassian.net/browse/MSP-21) - POC
 - 💡 [**MSP-22**](https://daniel-hengyu-xiang.atlassian.net/browse/MSP-22) - Ready for stable release
