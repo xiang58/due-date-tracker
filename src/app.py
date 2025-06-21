@@ -10,7 +10,11 @@ def main():
     recs = repo.get_all_recs()
     for rec in recs:
         draw_progress_bar(rec)
-        st.button('Reset', key=rec['id'], on_click=render_dt_picker, args=(rec,))
+        cols = st.columns(6)
+        with cols[0]:
+            st.button('Reset', key=f'reset_{rec['id']}', on_click=render_dt_picker, args=(rec,))
+        with cols[1]:
+            st.button('Edit', key=f'edit_{rec['id']}', on_click=render_edit_dialog, args=(rec,))
         st.write('')
         st.write('')
 
@@ -73,6 +77,20 @@ def render_dt_picker(rec):
     new_reset_dt = st.date_input(f'Pick a reset date for {rec['desc']}:', max_value=date.today()).isoformat()
     if st.button('Confirm'):
         repo.update_reset_dt(rec, new_reset_dt)
+        st.rerun()
+
+
+@st.dialog('Edit Record')
+def render_edit_dialog(rec):
+    new_desc = st.text_input('New description:').strip()
+    new_period = st.number_input('New period:', value=None, min_value=1)
+
+    if st.button('Confirm'):
+        if not new_desc and not new_period:
+            st.toast('Description and period cannot be both empty!', icon='🚨')
+            return
+
+        repo.edit_rec(rec, new_desc, new_period)
         st.rerun()
 
 
