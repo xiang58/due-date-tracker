@@ -14,11 +14,13 @@ def main():
     for rec in recs:
         draw_progress_bar(rec)
         cols = st.columns(6)
-        
+
         with cols[0]:
             st.button('Reset', key=f'reset_{rec['id']}', on_click=render_dt_picker, args=(rec,))
         with cols[1]:
             st.button('Edit', key=f'edit_{rec['id']}', on_click=render_edit_dialog, args=(rec,))
+        with cols[2]:
+            st.button('Delete', key=f'delete_{rec['id']}', on_click=render_del_rec_dialog, args=(rec['id'],))
 
         st.write('')
         st.write('')
@@ -109,6 +111,16 @@ def render_edit_dialog(rec):
             st.toast('Description and period cannot be both empty!', icon='🚨')
             return
         repo.edit_rec(rec, new_desc, new_period)
+        st.rerun()
+
+
+@st.dialog('Are you sure?')
+def render_del_rec_dialog(rec_id):
+    col1, col2 = st.columns(2)
+    if col1.button('No', type='primary'):
+        st.rerun()
+    if col2.button('Yes'):
+        repo.del_rec(rec_id)
         st.rerun()
 
 

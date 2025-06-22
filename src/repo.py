@@ -72,3 +72,14 @@ def add_rec(num_recs, desc, period, reset_dt):
         st.toast('Item added successfully!', icon='🎉')
     else:
         st.toast('Error adding item:' + str(response), icon='🚨')
+
+
+def del_rec(rec_id):
+    table = get_dynamodb_table()
+    response = table.delete_item(
+        Key={'id': rec_id}
+    )
+    if response['ResponseMetadata']['HTTPStatusCode'] == 200:
+        st.toast('Item deleted successfully!', icon='🎉')
+    else:
+        st.toast('Error deleting item:' + str(response), icon='🚨')
