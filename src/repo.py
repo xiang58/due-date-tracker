@@ -59,14 +59,17 @@ def edit_rec(rec, new_desc, new_period):
         st.toast('Error updating item:' + str(response), icon='🚨')
 
 
-def add_rec(num_recs, desc, period, reset_dt):
+def add_rec(recs, desc, period, reset_dt):
     table = get_dynamodb_table()
+    new_id = max([rec['id'] for rec in recs], default=0) + 1
+    
     rec = {
-        'id': num_recs + 1,
+        'id': new_id,
         'desc': desc,
         'period': period,
         'reset_dt': reset_dt
     }
+    
     response = table.put_item(Item=rec)
     if response['ResponseMetadata']['HTTPStatusCode'] == 200:
         st.toast('Item added successfully!', icon='🎉')

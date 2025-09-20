@@ -8,12 +8,12 @@ import repo
 
 def main():
     recs = repo.get_all_recs()
-    st.button('Add new record', key='add_btn', on_click=render_new_rec_dialog, args=(len(recs),))
+    st.button('Add new record', key='add_btn', on_click=render_new_rec_dialog, args=(recs,))
     st.divider()
 
     for rec in recs:
         draw_progress_bar(rec)
-        cols = st.columns(6)
+        cols = st.columns(8, vertical_alignment="bottom")
 
         with cols[0]:
             st.button('Reset', key=f'reset_{rec['id']}', on_click=render_dt_picker, args=(rec,))
@@ -27,7 +27,7 @@ def main():
 
 
 @st.dialog('Add new record')
-def render_new_rec_dialog(num_recs):
+def render_new_rec_dialog(recs):
     desc = st.text_input('Enter the description:').strip()
     period = st.number_input('Enter the period:', value=None, min_value=1)
     reset_dt = st.date_input(f'Pick a reset date:', max_value=date.today()).isoformat()
@@ -36,7 +36,7 @@ def render_new_rec_dialog(num_recs):
         if not desc or not period:
             st.toast('Description and period cannot be empty!', icon='🚨')
             return
-        repo.add_rec(num_recs, desc, period, reset_dt)
+        repo.add_rec(recs, desc, period, reset_dt)
         st.rerun()
 
 
