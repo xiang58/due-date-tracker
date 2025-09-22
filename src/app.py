@@ -8,11 +8,36 @@ import repo
 
 def main():
     recs = repo.get_all_recs()
+    st.button('Add new record', key='add_btn', on_click=render_new_rec_dialog, args=(recs,))
+    st.divider()
+
     for rec in recs:
         draw_progress_bar(rec)
-        st.button('Reset', key=rec['id'], on_click=render_dt_picker, args=(rec,))
+        cols = st.columns(8, vertical_alignment="bottom")
+
+        with cols[0]:
+            st.button('Reset', key=f'reset_{rec['id']}', on_click=render_dt_picker, args=(rec,))
+        with cols[1]:
+            st.button('Edit', key=f'edit_{rec['id']}', on_click=render_edit_dialog, args=(rec,))
+        with cols[2]:
+            st.button('Delete', key=f'delete_{rec['id']}', on_click=render_del_rec_dialog, args=(rec['id'],))
+
         st.write('')
         st.write('')
+
+
+@st.dialog('Add new record')
+def render_new_rec_dialog(recs):
+    desc = st.text_input('Enter the description:').strip()
+    period = st.number_input('Enter the period:', value=None, min_value=1)
+    reset_dt = st.date_input(f'Pick a reset date:', max_value=date.today()).isoformat()
+
+    if st.button('Confirm'):
+        if not desc or not period:
+            st.toast('Description and period cannot be empty!', icon='🚨')
+            return
+        repo.add_rec(recs, desc, period, reset_dt)
+        st.rerun()
 
 
 def draw_progress_bar(rec):
@@ -73,6 +98,29 @@ def render_dt_picker(rec):
     new_reset_dt = st.date_input(f'Pick a reset date for {rec['desc']}:', max_value=date.today()).isoformat()
     if st.button('Confirm'):
         repo.update_reset_dt(rec, new_reset_dt)
+        st.rerun()
+
+
+@st.dialog('Edit Record')
+def render_edit_dialog(rec):
+    new_desc = st.text_input('New description:').strip()
+    new_period = st.number_input('New period:', value=None, min_value=1)
+
+    if st.button('Confirm'):
+        if not new_desc and not new_period:
+            st.toast('Description and period cannot be both empty!', icon='🚨')
+            return
+        repo.edit_rec(rec, new_desc, new_period)
+        st.rerun()
+
+
+@st.dialog('Are you sure?')
+def render_del_rec_dialog(rec_id):
+    col1, col2 = st.columns(2)
+    if col1.button('No', type='primary'):
+        st.rerun()
+    if col2.button('Yes'):
+        repo.del_rec(rec_id)
         st.rerun()
 
 
