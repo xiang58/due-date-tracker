@@ -36,13 +36,16 @@ def update_reset_dt(rec, new_reset_dt):
 def edit_rec(rec, new_desc, new_period):
     update_expr = 'SET '
     expression_values = {}
+    expression_names = {}
 
     if new_desc:
-        update_expr += 'desc = :desc,'
+        update_expr += '#desc = :desc,'
         expression_values[':desc'] = new_desc
+        expression_names['#desc'] = 'desc'
     if new_period:
-        update_expr += 'period = :period,'
+        update_expr += '#period = :period,'
         expression_values[':period'] = new_period
+        expression_names['#period'] = 'period'
     if update_expr.endswith(','):
         update_expr = update_expr[:-1]
 
@@ -50,7 +53,8 @@ def edit_rec(rec, new_desc, new_period):
     response = table.update_item(
         Key={'id': rec['id']},
         UpdateExpression=update_expr,
-        ExpressionAttributeValues=expression_values
+        ExpressionAttributeValues=expression_values,
+        ExpressionAttributeNames=expression_names
     )
 
     if response['ResponseMetadata']['HTTPStatusCode'] == 200:
