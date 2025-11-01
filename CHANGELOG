@@ -1,7 +1,10 @@
 💡 - new feature &emsp;&emsp; ⬆️ - enhancement &emsp;&emsp; 🐞 - bug fix
 ___
+### 📌 v0.3.1
+&emsp;&nbsp;🐞 [**MSP-41**](https://daniel-hengyu-xiang.atlassian.net/browse/MSP-41) - Fix bug when editing record  
+___
 
-### 📌 v0.3.0
+### v0.3.0
 &emsp;&nbsp;💡 [**MSP-30**](https://daniel-hengyu-xiang.atlassian.net/browse/MSP-30) - Enhacement  
 &emsp;&nbsp;💡 [**MSP-31**](https://daniel-hengyu-xiang.atlassian.net/browse/MSP-31) - Add past due date reminder  
 &emsp;&nbsp;💡 [**MSP-34**](https://daniel-hengyu-xiang.atlassian.net/browse/MSP-34) - Add color to progress bar  
