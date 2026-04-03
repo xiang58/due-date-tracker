@@ -1,6 +1,9 @@
 💡 - new feature &emsp;&emsp; ⬆️ - enhancement &emsp;&emsp; 🐞 - bug fix
 ___
-### 📌 v0.3.1
+### 📌 v0.3.2
+&emsp;&nbsp;🐞 [**MSP-65**](https://daniel-hengyu-xiang.atlassian.net/browse/MSP-65) - Fix pytz not found error  
+___
+### v0.3.1
 &emsp;&nbsp;🐞 [**MSP-41**](https://daniel-hengyu-xiang.atlassian.net/browse/MSP-41) - Fix bug when editing record  
 ___
 
